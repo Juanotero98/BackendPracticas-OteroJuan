@@ -63,14 +63,14 @@ console.log(manager.addProduct({
     stock: 75,
 }))
 
-//ESTE EJEMPLO DEBEREIA DAR "ERROR DATOS INVALIDOS" DEBIDO A QUE FALTAN DATOS//
+//ESTE EJEMPLO DEBEREIA DAR "ERROR DATOS INVALIDOS" DEBIDO A QUE SE REPITEN VARIOS DATOS//
 console.log(manager.addProduct({
-    title: "Limonada",
-    description: "Bebida agridulce con educorantes hecha a base de limones",
-    price: 437,
-    thumbnail: "",
-    code: "",
-    stock: 55,
+    title: "Coca Cola",
+    description: "Gaseosa de color oscuro que viene en botella de plastico con un etiqueta roja ",
+    price: 750,
+    thumbnail: "thumnail 1.jpg",
+    code: "P1",
+    stock: 30,
 }))
 
 console.log(manager.getProducts())
