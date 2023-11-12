@@ -1,4 +1,119 @@
-class ProductManager{
+//PRACTICA 2//
+const fs = require('fs');
+
+class ProductManager {
+    constructor(filePath) {
+        this.path = filePath;
+    }
+
+    async addProduct(productData) {
+        const products = await this.readFromFile();
+        const newProduct = {
+            id: this.getNextId(products),
+            ...productData
+        };
+        products.push(newProduct);
+        await this.writeToFile(products);
+        return newProduct;
+    }
+
+    async getProducts() {
+        const products = await this.readFromFile();
+        return products;
+    }
+
+    async getProductById(id) {
+        const products = await this.readFromFile();
+        const product = products.find(product => product.id === id);
+        return product;
+    }
+
+    async updateProduct(id, updatedFields) {
+        const products = await this.readFromFile();
+        const index = products.findIndex(product => product.id === id);
+        if (index !== -1) {
+            products[index] = { ...products[index], ...updatedFields };
+            await this.writeToFile(products);
+            return products[index];
+        } else {
+            return null;
+        }
+    }
+
+    async deleteProduct(id) {
+        const products = await this.readFromFile();
+        const index = products.findIndex(product => product.id === id);
+        if (index !== -1) {
+            const deletedProduct = products.splice(index, 1)[0];
+            await this.writeToFile(products);
+            return deletedProduct;
+        } else {
+            return null;
+        }
+    }
+
+    getNextId(products) {
+        const maxId = products.reduce((max, product) => (product.id > max ? product.id : max), 0);
+        return maxId + 1;
+    }
+
+    async readFromFile() {
+        try {
+            const data = await fs.promises.readFile(this.path, 'utf8');
+            return JSON.parse(data) || [];
+        } catch (error) {
+            return [];
+        }
+    }
+
+    async writeToFile(products) {
+        await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2), 'utf8');
+    }
+}
+
+// Ejemplo de uso
+const manager = new ProductManager('productos.json');
+
+(async () => {
+    await manager.addProduct({
+        title: 'Producto Prueba',
+        description: 'Este es un producto de prueba',
+        price: 200,
+        thumbnail: 'Sin imagen',
+        code: 'abc123',
+        stock: 25,
+    });
+
+    await manager.addProduct({
+        title: 'Producto 2',
+        description: 'Este tambien es un producto de prueba',
+        price: 400,
+        thumbnail: 'Tampoco tiene imagen',
+        code: 'abcd1234',
+        stock: 50,
+    });
+
+    console.log(await manager.getProducts());
+
+    console.log(await manager.getProductById(2));
+
+    await manager.updateProduct(1, { price: 75 });
+
+    console.log(await manager.getProducts());
+
+    await manager.deleteProduct(2);
+
+    console.log(await manager.getProducts());
+})();
+
+
+
+
+
+
+
+//PRACTICA 1//
+/*class ProductManager{
     constructor(){
         this.products=[]
         this.nextId= 1
@@ -75,4 +190,4 @@ console.log(manager.addProduct({
 
 console.log(manager.getProducts())
 console.log(manager.getProductById(2))
-console.log(manager.getProductById(4))
+console.log(manager.getProductById(4))*/
