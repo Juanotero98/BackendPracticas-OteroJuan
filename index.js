@@ -71,7 +71,7 @@ class ProductManager {
     }
 }
 
-// Ejemplo de uso
+
 const manager = new ProductManager('productos.json');
 
 (async () => {
@@ -105,12 +105,6 @@ const manager = new ProductManager('productos.json');
 
     console.log(await manager.getProducts());
 })();
-
-
-
-
-
-
 
 //PRACTICA 1//
 /*class ProductManager{
