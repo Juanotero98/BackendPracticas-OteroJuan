@@ -71,10 +71,13 @@ class ProductManager {
     }
 }
 
+module.exports = ProductManager
+
+
 
 const manager = new ProductManager('productos.json');
 
-(async () => {
+/*(async () => {
     await manager.addProduct({
         title: 'Producto Prueba',
         description: 'Este es un producto de prueba',
@@ -104,7 +107,7 @@ const manager = new ProductManager('productos.json');
     await manager.deleteProduct(2);
 
     console.log(await manager.getProducts());
-})();
+})();*/
 
 //PRACTICA 1//
 /*class ProductManager{
