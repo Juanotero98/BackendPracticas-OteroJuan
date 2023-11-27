@@ -1,4 +1,4 @@
-const express = require('express');
+/*const express = require('express');
 const ProductManager = require('./index'); 
 
 const app = express();
@@ -41,4 +41,4 @@ app.get('/products/:pid', async (req, res) => {
 
 app.listen(port, () => {
     console.log(`Servidor Express iniciado en http://localhost:${port}`);
-});
+});*/

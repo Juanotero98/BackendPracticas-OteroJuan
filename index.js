@@ -1,5 +1,5 @@
 //PRACTICA 2//
-const fs = require('fs');
+/*const fs = require('fs');
 
 class ProductManager {
     constructor(filePath) {
@@ -75,7 +75,7 @@ module.exports = ProductManager
 
 
 
-const manager = new ProductManager('productos.json');
+const manager = new ProductManager('productos.json');*/
 
 /*(async () => {
     await manager.addProduct({

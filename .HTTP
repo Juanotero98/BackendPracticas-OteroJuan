@@ -1,0 +1,26 @@
+/////////////////////////////// PRODUCTS ///////////////////////////////////////
+
+GET http://localhost:8080/api/products
+
+###
+GET http://localhost:8080/api/products/6
+
+###
+POST  http://localhost:8080/api/products
+
+###
+PUT  http://localhost:8080/api/products/10
+
+###
+DELETE http://localhost:8080/api/products/12
+
+////////////////////////////// CARTS ////////////////////////////////////////////
+
+###
+GET http://localhost:8080/api/carts/:cid 
+
+###
+POST http://localhost:8080/api/carts/
+
+###
+POST  http://localhost:8080/api/carts/:cid/product/:pid
