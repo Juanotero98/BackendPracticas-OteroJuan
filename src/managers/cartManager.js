@@ -44,7 +44,6 @@ class cartManager {
         }
     };
     
-
     addProductToCart = async (cid, pid) => {
         try {
             const carts = await this.readFromFile(); 
