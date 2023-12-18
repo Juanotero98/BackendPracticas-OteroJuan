@@ -1,17 +1,27 @@
 const express = require('express')
 const handlebars = require('express-handlebars')
 const productsRouter = require('./routes/products.router.js')
+const userRouter = require('./routes/users.router.js')
 const viewsRouter = require('./routes/views.router.js')
 const cartsRouter = require('./routes/carts.router.js')
 const {Server} = require('socket.io')
+const {connect} = require('mongoose')
 
 const app = express()
+
+const connectDb = async ()=>{ 
+    await connect('mongodb+srv://JuanseOtero:Juan0301@cluster0.x36rdg6.mongodb.net/c55625?retryWrites=true&w=majority')
+    //await connect('mongodb://localhost:27017/c55625')
+    console.log('Base de datos conectada')
+}
+connectDb()
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static(__dirname + '/public'));
 app.use('/api/products', productsRouter)
 app.use('/api/carts', cartsRouter)
+app.use('/api/users,', userRouter)
 
 //MOTOR DE HANDLEBAR//
 app.engine('hbs', handlebars.engine({
@@ -28,6 +38,8 @@ const serverHttp = app.listen(8080, ()=>{
     console.log("Corriendo en http://localhost:8080")
 })
 
+//const socketProduct = (io)=>{}
+//const socketProduct = ()=>{req, res, next}
 const socketServer = new Server(serverHttp)
 let arrayMensajes = []
 socketServer.on('connection', socket => {

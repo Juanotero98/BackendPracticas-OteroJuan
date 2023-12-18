@@ -24,3 +24,32 @@ POST http://localhost:8080/api/carts/
 
 ###
 POST  http://localhost:8080/api/carts/2/product/1
+
+
+/////////////////////////////// USERS ///////////////////////////////////////////
+
+###
+GET http://localhost:8080/api/users
+
+###
+POST http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+    "first_name": "Juan",
+    "last_name": "Otero",
+    "email": "oterojuan1998@gmail.com"
+}
+
+###
+PUT  http://localhost:8080/api/users/id
+Content-Type: application/json
+
+{
+    "first_name": "Juan 1",
+    "last_name": "Otero 1",
+    "email": "oterojuan1998@gmail.com 1"
+}
+
+###
+DELETE   http://localhost:8080/api/users/id
