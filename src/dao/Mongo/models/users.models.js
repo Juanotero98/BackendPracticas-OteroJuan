@@ -12,7 +12,8 @@ const usersSchema = Schema({
         type:String,
         required: true,
         unique:true
-    } 
+    },
+    atCreated: Date()
 })
 
 const usersModel = model (usersCollection, usersSchema)

@@ -36,20 +36,20 @@ POST http://localhost:8080/api/users
 Content-Type: application/json
 
 {
-    "first_name": "Juan",
-    "last_name": "Otero",
-    "email": "oterojuan1998@gmail.com"
+    "first_name": "Juan 1",
+    "last_name": "Otero 1",
+    "email": "oterosjuan1998@gmail.com"
 }
 
 ###
-PUT  http://localhost:8080/api/users/id
+PUT  http://localhost:8080/api/users/658dd30813316195efc83c87
 Content-Type: application/json
 
 {
-    "first_name": "Juan 1",
-    "last_name": "Otero 1",
-    "email": "oterojuan1998@gmail.com 1"
+    "first_name": "Juan 2",
+    "last_name": "Otero 2",
+    "email": "oterojuanse1998@gmail.com 1"
 }
 
 ###
-DELETE   http://localhost:8080/api/users/id
+DELETE   http://localhost:8080/api/users/658dd30813316195efc83c87

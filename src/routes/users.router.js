@@ -1,5 +1,5 @@
 const { Router } = require('express')
-const { usersModel } = require('../models/users.model')
+const { usersModel } = require('../dao/Mongo/models/users.model')
 
 const router = Router()
 const arrayUsuarios = [
@@ -67,7 +67,7 @@ router.put('/:uid', async (req, res) => {
                 message: 'ID de usuario no proporcionado'
             });
         }
-        const result = await usersModel.findByIdAndUpdate(uid, userToReplace, { new: true });
+        const result = await usersModel.updateOne({_id:uid}, userToReplace, { new: true });
         if (!result) {
             return res.status(404).send({
                 status: 'error',
