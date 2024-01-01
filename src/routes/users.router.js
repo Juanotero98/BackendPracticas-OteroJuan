@@ -1,7 +1,9 @@
 const { Router } = require('express')
-const { usersModel } = require('../dao/Mongo/models/users.model')
+const { usersModel } = require('../dao/Mongo/models/users.models')
+const UserDaoMongo = require('../dao/Mongo/userDaoMongo')
 
 const router = Router()
+const userService = new UserDaoMongo()
 const arrayUsuarios = [
     {id:1, nombre:'Nombre 1', apellido:'Apellido 1', genero: 'F'},
     {id:2, nombre:'Nombre 2', apellido:'Apellido 2', genero: 'F'},
@@ -17,7 +19,7 @@ const arrayUsuarios = [
 // GET localhost:8080 /api/users /
 router.get('/', async (req, res) => {
     try {
-        const users = await usersModel.find({});
+        const users = await userService.getUsers();
         res.send(users);
     } catch (error) {
         console.error(error);
@@ -34,7 +36,7 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         const { first_name, last_name, email } = req.body;
-        const result = await usersModel.create({
+        const result = await userService.createUser({
             first_name,
             last_name,
             email

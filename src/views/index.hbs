@@ -1,5 +1,11 @@
 <div>
-    <h1> Bienvenidos a ecomerce server</h1>
+    <h1> Bienvenidos a ecomerce {{username}}</h1>
+    <form action="/uploader" enctype="multipart/form-data" method="post">
+        <input type="file" name="myFile">
+        <button>Enviar</button>
+
+    </form>
+    
 </div>
 <input type="text" id="textInput">
 <div id="mensajes">

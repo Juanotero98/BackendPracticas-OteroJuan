@@ -13,7 +13,10 @@ const usersSchema = Schema({
         required: true,
         unique:true
     },
-    atCreated: Date()
+    atCreated:{
+        type:Date,
+        default: Date.now
+    }
 })
 
 const usersModel = model (usersCollection, usersSchema)

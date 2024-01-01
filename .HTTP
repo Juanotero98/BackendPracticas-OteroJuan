@@ -7,6 +7,16 @@ GET http://localhost:8080/api/products/6
 
 ###
 POST  http://localhost:8080/api/products
+Content-Type: application/json
+
+
+{
+    "name":"Producto prueba 1",
+    "description": "Un producto de prueba para testear el proyecto",
+    "price": 75,
+    "stock": 30
+    
+}
 
 ###
 PUT  http://localhost:8080/api/products/10
@@ -36,9 +46,9 @@ POST http://localhost:8080/api/users
 Content-Type: application/json
 
 {
-    "first_name": "Juan 1",
-    "last_name": "Otero 1",
-    "email": "oterosjuan1998@gmail.com"
+    "first_name": "Juan 98",
+    "last_name": "Otero 98",
+    "email": "juan1998@gmail.com"
 }
 
 ###

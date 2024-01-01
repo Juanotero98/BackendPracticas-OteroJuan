@@ -1,6 +1,16 @@
 const {Router} = require ('express')
+const { uploader } = require('../helpers/uploaders')
 
 const router = Router()
+router.use('/', (req,res)=>{
+    res.render('index.hbs', {
+        username: 'Juanse'
+    })
+})
+
+router.post('/uploader', uploader.single('myFile'),(req, res)=>{
+    res.send('imagen subida')
+})
 
 const productMock = [
     {id: '1',title: 'Producto 1', precio: 1500, stock: 100, descripcion: 'Esto es un producto'},

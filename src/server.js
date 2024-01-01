@@ -6,15 +6,17 @@ const viewsRouter = require('./routes/views.router.js')
 const cartsRouter = require('./routes/carts.router.js')
 const {Server} = require('socket.io')
 const {connect} = require('mongoose')
+const router = require('./routes/products.router.js')
 
 const app = express()
 
-const connectDb = async ()=>{ 
+const connectDb = async ()=>{
     await connect('mongodb+srv://JuanseOtero:Juan0301@cluster0.x36rdg6.mongodb.net/c55625?retryWrites=true&w=majority')
     //await connect('mongodb://localhost:27017/c55625')
-    console.log('Base de datos conectada')
+    
 }
 connectDb()
+
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
@@ -22,10 +24,11 @@ app.use(express.static(__dirname + '/public'));
 app.use('/api/products', productsRouter)
 app.use('/api/carts', cartsRouter)
 app.use('/api/users', usersRouter)
+app.use('/', viewsRouter)
 
 //MOTOR DE HANDLEBAR//
 app.engine('hbs', handlebars.engine({
-    extname: '.hbs'
+    textname: '.hbs'
 }))
 app.set('view engine', 'hbs')
 app.set('views', __dirname + '/views')
