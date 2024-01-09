@@ -18,6 +18,14 @@ const productMock = [
     {id: '3',title: 'Producto 3', precio: 1500, stock: 100, descripcion: 'Esto es un producto'},
 ]
 
+router.get('/register', async (req, res)=>{
+    res.send('register')
+})
+
+router.get('/login', async (req, res)=>{
+    res.send('login')
+})
+
 router.get('/', (req, res)=>{
     res.render('index', {
         title: "Mercado Juan",

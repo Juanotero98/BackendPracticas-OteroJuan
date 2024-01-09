@@ -4,10 +4,14 @@ const productsRouter = require('./routes/products.router.js')
 const usersRouter = require('./routes/users.router.js')
 const viewsRouter = require('./routes/views.router.js')
 const cartsRouter = require('./routes/carts.router.js')
+const sessionsRouter = require('./routes/sessions.router.js')
 const {Server} = require('socket.io')
 const {connect} = require('mongoose')
-const router = require('./routes/products.router.js')
-
+const cookieParser = require('cookie-parser')
+const session = require('express-session')
+const FileStore = require ('session-file-store')
+const MongoStore = require ('connect-mongo')
+ 
 const app = express()
 
 const connectDb = async ()=>{
@@ -21,10 +25,49 @@ connectDb()
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static(__dirname + '/public'));
+app.use(cookieParser('p@l@br@secret@'))
+
+//STRATEGIA MEMORIA SESSION//
+//app.use(session({
+//    secret: 'secretCoder',
+//    resave: true,
+//    saveUninitialized: true
+//}))
+
+//ESTRATEGIA MEMORIA SESSION//
+//const fileStore = new FileStore(session)
+//app.use(session({
+//    store: new fileStore({
+//        path:'./sessions',
+//        ttl: 100,
+//        retire: 0
+//    }),
+//    secret: 'secretCoder',
+//    resave: true,
+//   saveUninitialized: true
+//}))
+
+//ESTRATEGIA MONGO SESSION//
+
+app.use(session({
+    store: MongoStore.create({
+        mongoUrl:'mongodb+srv://JuanseOtero:Juan0301@cluster0.x36rdg6.mongodb.net/c55625?retryWrites=true&w=majority',
+        mongoOptions:{
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        },
+        ttl: 15000000,
+    }),
+    secret: 'secretCoder',
+    resave: true,
+   saveUninitialized: true
+}))
+
 app.use('/api/products', productsRouter)
 app.use('/api/carts', cartsRouter)
 app.use('/api/users', usersRouter)
 app.use('/', viewsRouter)
+app.use('/api/sessions', sessionsRouter)
 
 //MOTOR DE HANDLEBAR//
 app.engine('hbs', handlebars.engine({
