@@ -35,6 +35,32 @@ POST http://localhost:8080/api/carts/
 ###
 POST  http://localhost:8080/api/carts/2/product/1
 
+/////////////////////////////// SESSIONS ////////////////////////////////////////
+
+###
+POST  http://localhost:8080/api/sessions/login
+Content-Type: application/json
+
+{
+    "email": "juanotero1998@gmail.com",
+    "password": "12345"
+}
+
+###
+POST  http://localhost:8080/api/sessions/register
+Content-Type: application/json
+
+{
+    "first_name": " Juan",
+    "last_name": "Otero",
+    "email": "jso1998@gmail.com",
+    "password": "12345"
+}
+###
+GET  http://localhost:8080/api/sessions/register
+Content-Type: application/json
+authorization: Bearer ///COPIAR Y PEGAR EL TOKEN QUE NOS DEN///
+
 
 /////////////////////////////// USERS ///////////////////////////////////////////
 
@@ -46,9 +72,10 @@ POST http://localhost:8080/api/users
 Content-Type: application/json
 
 {
-    "first_name": "Juan 98",
-    "last_name": "Otero 98",
-    "email": "juan1998@gmail.com"
+    "first_name": "Juan 2024",
+    "last_name": "Otero 2024",
+    "email": "juan1998@gmail.com",
+    "password": "123456"
 }
 
 ###

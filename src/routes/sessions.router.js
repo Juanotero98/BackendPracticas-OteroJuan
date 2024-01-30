@@ -2,7 +2,11 @@ const{Router} = require('express')
 const { authentication } = require('../middlewares/auth.middlewares')
 const { usersModel } = require('../dao/Mongo/models/users.models')
 const bcrypt = require('bcrypt');
-
+const { createHash, isValidPassword } = require('../utils/hashPassword');
+const passport = require('passport');
+const { createToken, authenticationToken } = require('../utils/jwt.js');
+const { passportCall } = require('../utils/passportCall.js');
+const { authorizationJwt } = require('../middlewares/jwt-passport.middleware.js');
 
 const router = Router()
 
@@ -19,13 +23,13 @@ router.get('/', (req,res)=>{
     //res.send('sessions')
 })
 
+////////////////////////////////////////////////////////////////////////////////////////// ESTRATEGIA 1 //////////////////////////////////////////////////////////////////////////////////
 router.post('/register', async (req,res)=>{
     const {first_name,email,last_name, password} = req.body
      //consulta a base de datos//
         if(first_name === '' || password==='' || email ===''){
             return res.send('faltan completar campos obligatorios')
         }
-
         const userFound = await usersModel.findOne({email})
         if(userFound){
             return res.send({status: 'error', error: 'Ya existe el usuario'})
@@ -34,24 +38,26 @@ router.post('/register', async (req,res)=>{
             first_name,
             last_name,
             email,
-            password
+            password: createHash(password)
         }
 
         const result = await usersModel.create(newUser)
-        res.send({
+        const token = createToken({id: result._id,})
+        res.cookie('token', token,{
+            maxAge: 60 * 60 * 1000 * 24,
+            httpOnly: true,
+            ////////SI NO LO HAGO CON HBS USAR: /////////
+            //secure:true,
+            //sameSite: 'none'
+        }).json({
             status: 'success',
-            payload: {
-                first_name: result.first_name,
-                last_name: result.last_name,
-                email: result.email,
-                _id: result._id
-            }
+            message: 'logged in',   
         })
 })
 
 router.post('/login', async (req,res)=>{
     const {email, password} = req.body
-     //consulta a base de datos//
+     
         if(email  === '' || password=== ''){
             return res.send('todos los campos son obligatorios')
         }
@@ -61,27 +67,36 @@ router.post('/login', async (req,res)=>{
             return res.send('email o contraseña incorrectos')
         }
 
-        //VALIDAR CONTRASEÑA//
-        const passwordMatch = await bcrypt.compare(password, user.password);
-        if (!passwordMatch) {
-        return res.send('Email o contraseña incorrectos');
+        if(isValidPassword(password, { password: user.password})){
+            return res.send('Email o contraseña incorrectos')
         }
-
-        req.session.user = {
-            user:user._id,
-            first_name:user.first_name,
-            last_name:user.last_name,
-            admin: true
-        }
-        res.redirect('/productos')
+        const token = createToken({id: user._id, role: user.role})
+        res.cookie('token', token,{
+            maxAge: 60 * 60 * 1000 * 24,
+            httpOnly: true,
+            ////////SI NO LO HAGO CON HBS USAR: /////////
+            //secure:true,
+            //sameSite: 'none'
+        }).json({
+            status: 'success',
+            message: 'logged in',   
+        })
         
 })
 
-router.get('/currentprivate', authentication,(req,res)=>{
-    res.send('infor que solo puede ver el admin')
+router.get('/current', passportCall('jwt'),authorizationJwt('user','admin'),(req,res)=>{
+    res.send({message:'datos sensibles', reqUser: req.user})
 })
 
-router.get('/logout', (req, res)=>{
+///////////////////////////////////////////////////////////////////RUTAS DE PASSPORT ESTRATEGIA 2 ///////////////////////////////////////////////////////////
+
+router.get('/github', passport.authenticate('github', {scope: ['user:email']}), async(req,res)=>{})
+router.get('/githubcallback', passport.authenticate('github', {failureRedirect: '/login'}),(req,res)=>{
+    req.session.user = req.user
+    res.redirect('/')
+})
+
+router.get('/logout',(req, res)=>{
     req.session.destroy(error=>{
         if(error)return res.send({status:'error', error: error})     
         

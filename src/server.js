@@ -9,18 +9,16 @@ const {Server} = require('socket.io')
 const {connect} = require('mongoose')
 const cookieParser = require('cookie-parser')
 const session = require('express-session')
+//COOKIE//
 const FileStore = require ('session-file-store')
 const MongoStore = require ('connect-mongo')
+const {connectDb} = require ('./config/config.js')
+//PASSPORT//
+const passport = require ('passport')
+const { initializePassport } = require('./config/passport.config.js')
+
  
 const app = express()
-
-const connectDb = async ()=>{
-    await connect('mongodb+srv://JuanseOtero:Juan0301@cluster0.x36rdg6.mongodb.net/c55625?retryWrites=true&w=majority')
-    //await connect('mongodb://localhost:27017/c55625')
-    
-}
-connectDb()
-
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
@@ -49,19 +47,12 @@ app.use(cookieParser('p@l@br@secret@'))
 
 //ESTRATEGIA MONGO SESSION//
 
-app.use(session({
-    store: MongoStore.create({
-        mongoUrl:'mongodb+srv://JuanseOtero:Juan0301@cluster0.x36rdg6.mongodb.net/c55625?retryWrites=true&w=majority',
-        mongoOptions:{
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        },
-        ttl: 15000000,
-    }),
-    secret: 'secretCoder',
-    resave: true,
-   saveUninitialized: true
-}))
+
+
+// middlewars de passport//
+initializePassport()
+app.use(passport.initialize())
+
 
 app.use('/api/products', productsRouter)
 app.use('/api/carts', cartsRouter)

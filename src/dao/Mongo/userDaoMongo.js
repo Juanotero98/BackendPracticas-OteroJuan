@@ -7,19 +7,20 @@ class UserDaoMongo  {
     }
     async getUsers(){
         try {
-            return await this.model.find({})
+            return await this.usersModel.find({})
         } catch (error) {
             console.log(error)
         }
     }
-    async getUser(uid){
-        return await this.model.findeOne({_id: uid})
+    async getUser(filter){
+        return await this.usersModel.findeOne(filter)
     }
     async createUser(newUser){
         return await this.model.create(newUser)
     }
-    async updateUser(uid){}
-    async deleteUser(uid){}
+    updateUser = async (uid, userUpdate) => await this.usersModel.findeOneandUpdate({_id: uid}, userUpdate)
+
+    deleteUser = async(uid) => await this.usersModel.findeOneandDelete({_id:uid})
 
 }
 
