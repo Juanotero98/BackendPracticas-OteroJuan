@@ -5,6 +5,9 @@ class UserDaoMongo  {
         this.model = usersModel
 
     }
+
+    getUsersPaginate = async (limit, page=1)=> await this.userModel.paginate({},{limit, page, lean: true})
+    
     async getUsers(){
         try {
             return await this.usersModel.find({})

@@ -1,29 +1,30 @@
 const express = require('express')
 const handlebars = require('express-handlebars')
-const productsRouter = require('./routes/products.router.js')
-const usersRouter = require('./routes/users.router.js')
-const viewsRouter = require('./routes/views.router.js')
-const cartsRouter = require('./routes/carts.router.js')
-const sessionsRouter = require('./routes/sessions.router.js')
 const {Server} = require('socket.io')
 const {connect} = require('mongoose')
 const cookieParser = require('cookie-parser')
-const session = require('express-session')
+const appRouter = require('./routes/index.js')
+const viewsRouter = require ('./routes/views.router.js')
 //COOKIE//
-const FileStore = require ('session-file-store')
-const MongoStore = require ('connect-mongo')
-const {connectDb} = require ('./config/config.js')
+const {connectDb, configObject} = require ('./config/config.js')
+
 //PASSPORT//
 const passport = require ('passport')
 const { initializePassport } = require('./config/passport.config.js')
+const UserRouterCustom = require('./routes/userClass.router.js')
+const cors = require('cors')
 
  
 const app = express()
+const PORT = configObject.PORT
+//const UserRouterCustom = new UserRouterCustom()
+
 
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(express.static(__dirname + '/public'));
 app.use(cookieParser('p@l@br@secret@'))
+app.use(cors())
 
 //STRATEGIA MEMORIA SESSION//
 //app.use(session({
@@ -54,18 +55,16 @@ initializePassport()
 app.use(passport.initialize())
 
 
-app.use('/api/products', productsRouter)
-app.use('/api/carts', cartsRouter)
-app.use('/api/users', usersRouter)
-app.use('/', viewsRouter)
-app.use('/api/sessions', sessionsRouter)
-
 //MOTOR DE HANDLEBAR//
 app.engine('hbs', handlebars.engine({
     textname: '.hbs'
 }))
 app.set('view engine', 'hbs')
 app.set('views', __dirname + '/views')
+connectDb()
+
+
+app.use(appRouter)
 
 app.use('/views', viewsRouter)
 

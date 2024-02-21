@@ -84,7 +84,7 @@ router.post('/login', async (req,res)=>{
         
 })
 
-router.get('/current', passportCall('jwt'),authorizationJwt('user','admin'),(req,res)=>{
+router.get('/current', passportCall('jwt'),authorizationJwt('user'),(req,res)=>{
     res.send({message:'datos sensibles', reqUser: req.user})
 })
 

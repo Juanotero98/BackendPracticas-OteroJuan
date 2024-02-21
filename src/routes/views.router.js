@@ -1,5 +1,7 @@
 const {Router} = require ('express')
 const { uploader } = require('../helpers/uploaders')
+const { usersModel } = require('../dao/Mongo/models/users.models')
+const { authentication } = require('../middlewares/auth.middlewares.js')
 
 const router = Router()
 router.use('/', (req,res)=>{
@@ -12,11 +14,27 @@ router.post('/uploader', uploader.single('myFile'),(req, res)=>{
     res.send('imagen subida')
 })
 
-const productMock = [
-    {id: '1',title: 'Producto 1', precio: 1500, stock: 100, descripcion: 'Esto es un producto'},
-    {id: '2',title: 'Producto 2', precio: 1500, stock: 100, descripcion: 'Esto es un producto'},
-    {id: '3',title: 'Producto 3', precio: 1500, stock: 100, descripcion: 'Esto es un producto'},
-]
+
+router.get('/users', authentication, async (req, res)=>{
+    const {numPage=1, limit=10} = req.query
+    const {
+        docs,
+        hasPrevPage,
+        hasNextPage,
+        prevPage,
+        nextPage,
+        page
+    } = await usersModel.paginate({}, {limit, page: numPage, sort: {first_name:1}, lean: true})
+
+    res.render('users',{
+        users: docs,
+        hasNextPage,
+        hasPrevPage,
+        prevPage,
+        nextPage,
+        page
+    })
+})
 
 router.get('/register', async (req, res)=>{
     res.send('register')
@@ -41,12 +59,15 @@ router.get('/products', (req, res)=>{
         role: "admin"
     }
 
+    const productService = new ProductDaoMongo()
+    const products = productService.getProducts() 
+
 
     res.render('products', {
         title: userMock.title,
         name: userMock.name,
         isAdmin: userMock.role == 'admin',
-        products: productMock,
+        products,
         style:"products.css"
     })
 })

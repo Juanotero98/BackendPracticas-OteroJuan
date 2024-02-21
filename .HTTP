@@ -35,6 +35,11 @@ POST http://localhost:8080/api/carts/
 ###
 POST  http://localhost:8080/api/carts/2/product/1
 
+/////////////////////////////// PRUEBAS /////////////////////////////////////////
+
+###
+GET http://localhost:8080/api/prueba/fede
+
 /////////////////////////////// SESSIONS ////////////////////////////////////////
 
 ###
@@ -59,13 +64,16 @@ Content-Type: application/json
 ###
 GET  http://localhost:8080/api/sessions/register
 Content-Type: application/json
-authorization: Bearer ///COPIAR Y PEGAR EL TOKEN QUE NOS DEN///
+authorization: Bearer ///COPIAR Y PEGAR EL TOKEN QUE NOS DEN CLASE 21///
 
 
 /////////////////////////////// USERS ///////////////////////////////////////////
 
 ###
 GET http://localhost:8080/api/users
+Content-Type: application/json
+authorization: Bearer  ///COPIAR Y PEGAR EL TOKEN QUE NOS DEN CLASE 21///
+
 
 ###
 POST http://localhost:8080/api/users
