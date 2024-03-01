@@ -1,13 +1,15 @@
+const ProductManager = require("../dao/File/managers/productManager");
 const ProductDaoMongo = require("../dao/Mongo/productDaoMongo");
 
 class ProductController {
     contructor(){
-        this.productsService = new ProductDaoMongo
+        this.productsService = new ProductDaoMongo()
+        //this.productsService = new ProductManager()
         this.getProducts = this.getProducts.bind(this)
     }
 
      getProducts = async (req, res) =>{
-        const products = await this.productService.getProducts();
+        const products = await this.productService.get();
         res.send({
           status: "success",
           payload: products,
@@ -33,7 +35,7 @@ class ProductController {
         const productData = req.body;
     
         try {
-          const newProduct = await this.productService.addProduct(productData);
+          const newProduct = await this.productService.create(productData);
           res.status(201).send({
             status: "success",
             payload: newProduct,
@@ -52,7 +54,7 @@ class ProductController {
         const updatedFields = req.body;
     
         try {
-          const updatedProduct = await this.productService.updateProduct(
+          const updatedProduct = await this.productService.update(
             parseInt(pid),
             updatedFields
           );
@@ -80,7 +82,7 @@ class ProductController {
         const { pid } = req.params;
     
         try {
-          const deletedProduct = await this.productService.deleteProduct(parseInt(pid));
+          const deletedProduct = await this.productService.delete(parseInt(pid));
     
           if (!deletedProduct) {
             return res.status(404).send({

@@ -3,11 +3,13 @@ const UserDaoMongo = require ('../dao/Mongo/userDaoMongo')
 class UserController {
     constructor(){
         this.userService = new UserDaoMongo()
+        //this.usersServicee = usersModel
+        //this.usersServicec = new UserManagerMemory()
     }
      getUsers = async(req, res)=>{
         try {
             //const users = await usersModel.find({}).limit(50)// 5000 -> 100
-            const users = await this.userService.getUsers()
+            const users = await this.userService.get()
             res.send(users)
             
         } catch (error) {
@@ -18,7 +20,7 @@ class UserController {
      createUser = async (req, res) => {
         try {
             const { first_name, last_name, email } = req.body;
-            const result = await this.userService.createUser({
+            const result = await this.userService.create({
                 first_name,
                 last_name,
                 email
@@ -50,7 +52,7 @@ class UserController {
                     message: 'ID de usuario no proporcionado'
                 });
             }
-            const result = await this.userService.updateUser({_id:uid}, userToReplace, { new: true });
+            const result = await this.userService.update({_id:uid}, userToReplace, { new: true });
             if (!result) {
                 return res.status(404).send({
                     status: 'error',
@@ -80,7 +82,7 @@ class UserController {
                     message: 'ID de usuario no proporcionado'
                 });
             }
-            const result = await this.usersService.deleteUser(uid);
+            const result = await this.usersService.delete(uid);
             if (!result) {
                 return res.status(404).send({
                     status: 'error',

@@ -5,52 +5,73 @@ class ProductManager {
         this.path = './src/mockDB/productos.json';
     }
 
-    async addProduct(productData) {
-        const products = await this.readFromFile();
-        const newProduct = {
-            id: this.getNextId(products),
-            ...productData
-        };
-        products.push(newProduct);
-        await this.writeToFile(products);
-        return newProduct;
-    }
+    create = async(newItem) => {
+        try {
+            let products = await this.readFile()
+            const productDb = products.find(product=> product.code === newItem.code)
+            console.log(productDb)
+            if(productDb){
+                return 'Se encuentra el producto'
+            }
 
-    async getProducts() {
-        const products = await this.readFromFile();
-        return products;
-    }
+            if(products.lenght == 0){
+                newItem.id = 1
+                products.push(newItem)
+            } else{
+                products = [...products, {...newItem, id: products[products.lenght - 1].id+1}]
+            }
 
-    async getProduct(id) {
-        const products = await this.readFromFile();
-        if(!products) return 'No hay productos'
-        const product = products.find(product => product.id === id);
-        return product;
-    }
-
-    async updateProduct(id, updatedFields) {
-        const products = await this.readFromFile();
-        const index = products.findIndex(product => product.id === id);
-        if (index !== -1) {
-            products[index] = { ...products[index], ...updatedFields };
-            await this.writeToFile(products);
-            return products[index];
-        } else {
-            return null;
+            await fs.promises.writeFile(this.path, JSON.stringify(products,null, 2), 'utf-8')
+            return 'Producto agregado'
+        } catch (error) {
+            return new Error(error)
         }
     }
 
-    async deleteProduct(id) {
-        const products = await this.readFromFile();
-        const index = products.findIndex(product => product.id === id);
-        if (index !== -1) {
-            const deletedProduct = products.splice(index, 1)[0];
-            await this.writeToFile(products);
-            return deletedProduct;
-        } else {
-            return null;
+    get = async ()=>{
+        try{
+            return await this.readFile()
+        }catch(error){
+            return 'No hay productos'
         }
     }
+
+   getBy = async (filter) =>{
+    try {
+        const products = await this.readFile()
+        return products.find(product=>product.id == filter)
+    } catch (error) {
+        return new Error(error)
+    }
+   }
+
+    update = async (id, newItem) =>{
+        try {
+            let products = await this.readFile()
+            const index = products.findIndex(product => product.id === id)
+            if (index == -1){
+                return 'No se encontro producto'
+            }
+            products[index] = {...newItem, id: id}
+            await fs.promises.writeFile(this.path, JSON.stringify(products, null, 2 ), 'utf-8')
+        } catch (error) {
+            return new Error (error)
+        }
+    }
+
+   delete = async (id) =>{
+    try {
+        let products = await this.readFile()
+        const index = products.findIndex(product => product.id == id)
+        if(index == -1){
+            return 'No se encontro producto'
+        }
+       products = products.filter(product => product.id === id)
+       await fs.promises.writeFile(this.path, JSON.stringify(products, null,2),'utf-8')
+   }catch(error){
+    return new Error(error)
+   }
+}
 
     getNextId(products) {
         const maxId = products.reduce((max, product) => (product.id > max ? product.id : max), 0);

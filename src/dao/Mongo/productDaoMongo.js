@@ -3,29 +3,25 @@ const ProductsModel = require('../Mongo/models/products.models');
 
 class ProductDaoMongo {
     
-    async addProduct(ProductData) {
-        const newProduct = await ProductsModel.create(ProductData);
-        return newProduct;
+    constructor(){
+        this.model = ProductsModel
+
     }
 
-    async getProducts() {
-        const products = await ProductsModel.find();
-        return products;
+    async get(){
+        return await this.model.find()
     }
-
-    async getProduct(uid) {
-        const product = await ProductsModel.findById({_id: uid});
-        return product;
+    async getBy(filter){
+        return await this.model.findById(filter)
     }
-
-    async updateProduct(id, updatedFields) {
-        const updatedProduct = await ProductsModel.findByIdAndUpdate(id, updatedFields, { new: true });
-        return updatedProduct;
+    async create(newProduct){
+        return await this.model.create(newProduct)
     }
+    async update(pid, productToUpdate){
+        return this.model.findByIdAndUpdate({_id: pid, productToUpdate})
+    }
+    async delete(pid){
 
-    async deleteProduct(uid) {
-        const deletedProduct = await ProductsModel.findByIdAndDelete({_id: uid});
-        return deletedProduct;
     }
 
     
