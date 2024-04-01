@@ -12,9 +12,11 @@ Content-Type: application/json
 
 {
     "name":"Producto prueba 1",
+    "category": "Ropa",
     "description": "Un producto de prueba para testear el proyecto",
     "price": 75,
-    "stock": 30
+    "stock": 30,
+    "thumbnail": "imagen.prueba"
     
 }
 

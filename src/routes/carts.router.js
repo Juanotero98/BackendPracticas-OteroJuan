@@ -1,12 +1,15 @@
 const { Router } = require("express");
 const cartManager = require("../dao/File/managers/cartManager");
+const { CartsModel } = require("../dao/Mongo/models/carts.models");
 const cartsService = new cartManager();
 const router = Router();
+
+
 
 router.get("/:cid", async (req, res) => {
   try {
     const { cid } = req.params;
-    const cart = await cartsService.getCartById(parseInt(cid));
+    const cart = await CartsModel.getCartById(parseInt(cid));
     res.send({
       status: "success",
       payload: cart,
@@ -22,7 +25,7 @@ router.get("/:cid", async (req, res) => {
 
 router.post('/', async(req, res)=>{
     try {
-        const newCart = await cartsService.createCart()
+        const newCart = await CartsModel.createCart()
         res.status(201).send({
             status: 'success',
             payload: newCart
@@ -41,7 +44,7 @@ router.post('/:cid/product/:pid', async (req, res)=>{
         const {cid, pid} = req.params
         const {quantity} = req.body
 
-        const updatedCart = await cartsService.addProductToCart(parseInt(cid), parseInt(pid), quantity)
+        const updatedCart = await CartsModel.addProductToCart(parseInt(cid), parseInt(pid), quantity)
 
         res.send({
             status: "success",

@@ -1,10 +1,10 @@
-const {configObject: {persistence}} = require('../config/config.js')
+const {configObject } = require('../config/config.js')
 
 let UserDao 
 let ProductDao 
-console.log(persistence)
+console.log('persistence factory',configObject.persistence)
 
-switch (persistence) {
+switch (configObject.persistence) {
     case 'MONGO':
         const UserDaoMongo = require('./Mongo/userDaoMongo.js')
         UserDao = UserDaoMongo
@@ -12,21 +12,27 @@ switch (persistence) {
         const ProductDaoMongo = require ('./Mongo/productDaoMongo.js')
         ProductDao = ProductDaoMongo
         break;
+
+    case 'SQL':
+
+        break;
+            
     case 'MEMORY':
 
         break;
     case 'FILE':
-        const UserDaoMongo = require('./File/managers/usersDaoMemory')
-        UserDao = UserDaoMongo
+        //const UserDaoMongo = require('./File/managers/usersDaoMemory')
+       // UserDao = UserDaoMongo
 
-        const ProductDaoMongo = require ('./File/managers/productManager.js')
+        const ProductDaoMongo = require ('./Mongo/productDaoMongo.js')
         ProductDao = ProductDaoMongo
         break;    
+
     default:
         break;
 }
 
-module.export = {
+module.exports = {
     ProductDao,
     UserDao
 }

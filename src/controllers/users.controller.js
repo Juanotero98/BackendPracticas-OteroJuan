@@ -1,10 +1,12 @@
 const UserDaoMongo = require ('../dao/Mongo/userDaoMongo')
+const { UserDto } = require('../dtos/usersDto')
+const {usersService} = require ('../repositories/services.js')
+
 
 class UserController {
     constructor(){
-        this.userService = new UserDaoMongo()
-        //this.usersServicee = usersModel
-        //this.usersServicec = new UserManagerMemory()
+        this.userService = usersService
+        
     }
      getUsers = async(req, res)=>{
         try {
@@ -19,12 +21,11 @@ class UserController {
     
      createUser = async (req, res) => {
         try {
-            const { first_name, last_name, email } = req.body;
-            const result = await this.userService.create({
-                first_name,
-                last_name,
-                email
-            });
+            const { first_name, last_name, email, password } = req.body;
+
+            const newUser = {first_name, last_name, password, email}
+            console.log(newUser)
+            //const result = await this.userService.create(newUser);
     
             
             res.status(201).send({

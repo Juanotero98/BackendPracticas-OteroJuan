@@ -2,6 +2,7 @@ const {Router} = require ('express')
 const { uploader } = require('../helpers/uploaders')
 const { usersModel } = require('../dao/Mongo/models/users.models')
 const { authentication } = require('../middlewares/auth.middlewares.js')
+const ProductDaoMongo = require ('../dao/Mongo/productDaoMongo.js')
 
 const router = Router()
 router.use('/', (req,res)=>{

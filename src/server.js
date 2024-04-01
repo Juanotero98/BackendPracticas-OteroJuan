@@ -5,6 +5,7 @@ const {connect} = require('mongoose')
 const cookieParser = require('cookie-parser')
 const appRouter = require('./routes/index.js')
 const viewsRouter = require ('./routes/views.router.js')
+
 //COOKIE//
 const {connectDb, configObject} = require ('./config/config.js')
 
@@ -53,6 +54,8 @@ app.use(cors())
 // middlewars de passport//
 initializePassport()
 app.use(passport.initialize())
+
+app.use(appRouter)
 
 
 //MOTOR DE HANDLEBAR//

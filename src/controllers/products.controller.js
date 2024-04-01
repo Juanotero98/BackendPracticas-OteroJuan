@@ -18,7 +18,7 @@ class ProductController {
 
      getProduct = async (req, res) => {
         const { pid } = req.params;
-        const product = await this.productService.getProduct(parseInt(pid));
+        const product = await this.productService.getProduct({_id: pid});
         if (!product) {
           return res.status(400).send({
             status: "Error",

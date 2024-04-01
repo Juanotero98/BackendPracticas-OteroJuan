@@ -1,5 +1,8 @@
 const {Router} = require('express')
 const {fork} = require ('node:child_process')
+const { sendMail } = require('../utils/sendMail')
+const { sendSMS } = require('../utils/sendSMS')
+
 const router = Router()
 function operacionCompleja(){
     let result = 0
@@ -21,6 +24,28 @@ router.get('/noblock', (req, res)=>{
         res.send(`El resultado es: ${data}`)
     })
     
+})
+
+router.get('/sendsms', (req, res)=>{
+    sendSMS(`Bienvenido`, {first_name:'Juan',last_name:'Otero', phone: '+541132112158'})
+    res.send('SMS ENVIADO')
+})
+
+router.get('/sendmail', (req, res)=>{
+    const user = {
+        email:'coderjuanse@gmail.com',
+        first_name: 'Juan',
+        last_name: 'Otero',
+    }
+    //LLAMARA UNA FUNCION//
+    const to = user.email
+    const subject = 'Esto es un mail de prueba'
+    const html = 
+    `<div>
+    <h1>Bienvenido a prueba de email ${user.first_name} ${user.last_name}</h1>
+    </div>`
+    sendMail(to, subject, html)
+    res.send('Mail enviado')
 })
 
 // EXPRESIONES REGULARES UTF-8 Ñ O EL ACENTO Á -> %C3%A1 / É-> %C3%A9 / Ú -> %C3%BC
