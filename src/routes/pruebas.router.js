@@ -94,6 +94,7 @@ router.get('/logger',(req,res)=>{
 // artillery quick --count 40 --num 50 "http://localhost:8080/pruebas/compleja" -o compleja.json
 // artillery run config.yml -- output testPerformance.json
 // artillery report testPerformance.json -o testResults.html
+
 router.get('/simple', (req, res)=>{
     let sum = 0
     for(let i = 0; i < 1000000; i++){
@@ -102,12 +103,12 @@ router.get('/simple', (req, res)=>{
     res.send(`La suma es ${sum}`)
 })
 
-function operacionCompleja(){
-    let result = 0
-    for (let i = 0; i< 7e9; i++) {
-        result += i  
+function operacionCompleja(){//ARTILLERY A ESTE, NO TERMINABA TODA LA OPERACION, EJECUTABA HASTA QUE SE SATURABA EL SERVIDOR
+    let sum = 0
+    for (let i = 0; i< 5e8; i++) {
+        sum += i  
     }
-    return result
+    res.send(`La suma es ${sum}`)
 }
 
 router.get('/block', (req, res)=>{
@@ -124,7 +125,7 @@ router.get('/noblock', (req, res)=>{
     
 })
 
-//router.get('/sendsms', (req, res)=>{
+ //router.get('/sendsms', (req, res)=>{
     //sendSMS(`Bienvenido`, {first_name:'Juan',last_name:'Otero', phone: '+541132112158'})
     //res.send('SMS ENVIADO')
 //})

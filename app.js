@@ -1,4 +1,13 @@
-/*const express = require('express');
+const cluster = require ('cluster')
+const {cpus} = require('os')
+const { appListen } = require("./src/server");
+const { logger } = require('./src/utils/logger');
+
+const numeroDeProcesadores = cpus().length
+//console.log(numeroDeProcesadores)
+
+/*const express = require('express'); 
+
 const ProductManager = require('./index'); 
 
 const app = express();
@@ -42,3 +51,25 @@ app.get('/products/:pid', async (req, res) => {
 app.listen(port, () => {
     console.log(`Servidor Express iniciado en http://localhost:${port}`);
 });*/
+
+
+//appListen()
+//console.log('Process is primary: ',cluster.isPrimary)
+//VAMOS A CREAR UN PROCESO POR CADA HILO DE EJECUCION DE NUESTRO CPU
+
+if (cluster.isPrimary){
+    logger.info('Proceso primario, que va a generar workers')
+    //PROCESO HIJO
+    for (let i = 0; i < numeroDeProcesadores; i++) {
+        cluster.fork()    
+    }
+
+    cluster.on('message', worker=>{
+        logger.info(`Mensaje recibido de el worker ${worker.process.pid}`)
+    })
+} else {
+    logger.info('Al ser un workers, no cuento como primario, por lo tanto process.isPrimary = flase')
+    logger.info(`Soy un proceso worker con el id ${process.pid}`)
+
+    appListen()
+}
